@@ -1,0 +1,33 @@
+Assignment 12: Write a program to implementing with NLTK: Tokenization, stemming, 
+and lemmatization
+ 
+pip install nltk 
+import nltk 
+# Download the 'punkt' tokenizer 
+nltk.download('punkt') 
+import nltk 
+# Download the 'punkt_tab' resource, which is required for tokenization 
+nltk.download('punkt_tab')   
+# Download other necessary resources for lemmatization and stop words 
+nltk.download('wordnet')   
+nltk.download('stopwords')  
+from nltk.tokenize import word_tokenize 
+from nltk.stem import PorterStemmer 
+from nltk.stem import WordNetLemmatizer 
+# Sample text for demonstration 
+text = "NLTK is a great toolkit for Natural Language Processing. Tokenization, Stemming, and 
+Lemmatization are important tasks." 
+# Tokenization: Split text into words 
+tokens = word_tokenize(text) 
+print("Tokens:", tokens) 
+# Stemming: Reduce words to their root form using Porter Stemmer 
+stemmer = PorterStemmer() 
+stemmed_words = [stemmer.stem(word) for word in tokens] 
+print("Stemmed words:", stemmed_words) 
+# Lemmatization: Reduce words to their base form using WordNet Lemmatizer 
+lemmatizer = WordNetLemmatizer() 
+lemmatized_words = [lemmatizer.lemmatize(word) for word in tokens] 
+print("Lemmatized words (default pos=noun):", lemmatized_words) 
+# Optional: Lemmatization with POS tagging (verbs, adjectives, etc.) 
+lemmatized_verbs = [lemmatizer.lemmatize(word, pos='v') for word in tokens] 
+print("Lemmatized words (as verbs):", lemmatized_verbs) 

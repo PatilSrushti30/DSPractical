@@ -1,0 +1,29 @@
+Assignment 4: Write a program to implementing Clustering using the K-means algorithm 
+import numpy as np 
+import matplotlib.pyplot as plt 
+from sklearn.cluster import KMeans 
+from sklearn.datasets import make_blobs 
+# Step 1: Generate synthetic data (for demonstration) 
+# Generating 300 data points with 4 centers (clusters) 
+X, y = make_blobs(n_samples=300, centers=4, random_state=42) 
+# Step 2: Apply the K-means algorithm 
+# Set the number of clusters to 4 (since we generated data with 4 centers) 
+kmeans = KMeans(n_clusters=4, random_state=42) 
+kmeans.fit(X) 
+# Step 3: Get the centroids and labels for the clusters 
+centroids = kmeans.cluster_centers_ 
+labels = kmeans.labels_ 
+# Step 4: Visualize the clusters 
+plt.figure(figsize=(8, 6)) 
+# Scatter plot of data points with colors corresponding to cluster labels 
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k') 
+# Mark the centroids with a red 'X' 
+plt.scatter(centroids[:, 0], centroids[:, 1], marker='X', s=200, c='red', label='Centroids') 
+# Add titles and labels 
+plt.title('K-means Clustering') 
+plt.xlabel('Feature 1') 
+plt.ylabel('Feature 2') 
+# Show the legend 
+plt.legend() 
+# Display the plot 
+plt.show() 

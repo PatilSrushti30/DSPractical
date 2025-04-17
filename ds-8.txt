@@ -1,0 +1,55 @@
+Assignment 8: Write a program to implementing SVM for classification tasks. 
+import numpy as np 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn.preprocessing import StandardScaler 
+from sklearn.svm import SVC 
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix 
+# Load dataset from CSV file (replace 'your_dataset.csv' with your actual file path) 
+df = pd.read_csv('pca.csv') 
+# Check the first few rows of the dataset 
+print(df.head()) 
+# Assuming the last column is the target variable (classification labels) 
+X = df.iloc[:, :-1]  # Select all rows and all columns except the last one for features 
+y = df.iloc[:, -1]   # Select the last column for the target (labels) 
+# Step 1: Split the dataset into training and testing sets (80% training, 20% testing) 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) 
+# Step 2: Standardize features using StandardScaler (important for SVM) 
+scaler = StandardScaler() 
+X_train = scaler.fit_transform(X_train)  # Fit on training data and transform it 
+X_test = scaler.transform(X_test)        # Use the same scaler to transform test data 
+# Step 3: Train the Support Vector Machine (SVM) model 
+svm_model = SVC(kernel='linear', random_state=42)  # Using a linear kernel for simplicity 
+svm_model.fit(X_train, y_train)  # Train the model on the training set 
+# Step 4: Make predictions using the trained SVM model 
+y_pred = svm_model.predict(X_test) 
+# Step 5: Evaluate the model's performance 
+accuracy = accuracy_score(y_test, y_pred) 
+conf_matrix = confusion_matrix(y_test, y_pred) 
+report = classification_report(y_test, y_pred)  
+# Print evaluation results 
+print(f'Accuracy: {accuracy:.4f}') 
+print('Confusion Matrix:') 
+print(conf_matrix) 
+print('Classification Report:') 
+print(report) 
+# Step 6: Optional - Visualize the decision boundaries (only works for 2D features) 
+# This is just a visualization example for datasets with two features 
+if X.shape[1] == 2:  # Check if we have only two features for visualization 
+# Create a mesh grid for plotting decision boundaries 
+h = .02 
+x_min, x_max = X_train[:, 0].min() - 1, X_train[:, 0].max() + 1 
+y_min, y_max = X_train[:, 1].min() - 1, X_train[:, 1].max() + 1 
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h)) 
+# Predict over the mesh grid 
+Z = svm_model.predict(np.c_[xx.ravel(), yy.ravel()]) 
+Z = Z.reshape(xx.shape) 
+# Plot decision boundary 
+plt.contourf(xx, yy, Z, alpha=0.8) 
+plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train, edgecolors='k', marker='o', 
+cmap=plt.cm.Paired) 
+plt.title('SVM Decision Boundary with Linear Kernel') 
+plt.xlabel('Feature 1') 
+plt.ylabel('Feature 2') 
+plt.show()

@@ -1,0 +1,39 @@
+Assignment 10: Write a program to implementing with big data concepts using sample 
+datasets & Setting up a Hadoop environment. 
+# Install Java 
+!sudo apt update 
+!sudo apt install openjdk-8-jdk 
+# Download and extract Hadoop 
+!wget http://apache.mirrors.lucidnetworks.net/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz 
+!tar -xzvf hadoop-3.3.1.tar.gz 
+!mv hadoop-3.3.1 /usr/local/hadoop 
+# Sample dataset (you can imagine it as a text file with large data) 
+dataset = """ 
+Hadoop is a framework for processing large datasets. 
+It is used for distributed storage and distributed computing. 
+Hadoop is part of the Big Data ecosystem. 
+Hadoop helps process Big Data. 
+""" 
+# Save dataset to a file (simulating a big text file) 
+with open('/content/dataset.txt', 'w') as f: 
+    f.write(dataset) 
+ 
+from pyspark.sql import SparkSession 
+ 
+# Initialize Spark session 
+spark = SparkSession.builder.appName('WordCount').getOrCreate() 
+ 
+# Load the dataset into an RDD (Resilient Distributed Dataset) 
+rdd = spark.sparkContext.textFile('/content/dataset.txt') 
+ 
+# Perform word count 
+word_counts = rdd.flatMap(lambda line: line.split()) \ 
+                 .map(lambda word: (word.lower(), 1)) \ 
+                 .reduceByKey(lambda x, y: x + y) 
+ 
+# Collect and print the results 
+for word, count in word_counts.collect(): 
+    print(f'{word}: {count}') 
+ 
+# Stop the Spark session 
+spark.stop()
